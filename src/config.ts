@@ -13,7 +13,7 @@ export const SITE = {
   showBackButton: true,
   editPost: {
     enabled: false,
-    text: "Edit page",
+    text: "编辑本页",
     url: "https://github.com/lizhaopeng-cn/xtuul-blog/edit/main/",
   },
   dynamicOgImage: true,
