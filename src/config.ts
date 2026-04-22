@@ -1,0 +1,23 @@
+export const SITE = {
+  website: "https://blog.xtuul.com/",
+  author: "Xtuul",
+  profile: "https://github.com/lizhaopeng-cn",
+  desc: "记录 AI、编程、自动化和个人项目。",
+  title: "Xtuul Blog",
+  ogImage: "astropaper-og.jpg",
+  lightAndDarkMode: true,
+  postPerIndex: 4,
+  postPerPage: 4,
+  scheduledPostMargin: 15 * 60 * 1000,
+  showArchives: true,
+  showBackButton: true,
+  editPost: {
+    enabled: false,
+    text: "Edit page",
+    url: "https://github.com/lizhaopeng-cn/xtuul-blog/edit/main/",
+  },
+  dynamicOgImage: true,
+  dir: "ltr",
+  lang: "zh-CN",
+  timezone: "Asia/Shanghai",
+} as const;
