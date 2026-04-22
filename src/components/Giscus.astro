@@ -1,0 +1,62 @@
+---
+// Giscus 评论组件
+// 依赖 GitHub Discussions，配置来自仓库 lizhaopeng-cn/xtuul-blog
+---
+
+<section
+  id="giscus-container"
+  class="mt-10"
+  data-pagefind-ignore
+  aria-label="评论"
+>
+  <h2 class="mb-4 text-xl font-semibold tracking-wide">评论</h2>
+  <div id="giscus"></div>
+</section>
+
+<script is:inline data-astro-rerun>
+  (function () {
+    const container = document.getElementById("giscus");
+    if (!container) return;
+
+    // 清理上一页残留的 giscus iframe（ClientRouter 切换时会触发）
+    container.innerHTML = "";
+
+    function currentGiscusTheme() {
+      const theme = document.documentElement.getAttribute("data-theme");
+      return theme === "dark" ? "noborder_dark" : "noborder_light";
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.setAttribute("data-repo", "lizhaopeng-cn/xtuul-blog");
+    script.setAttribute("data-repo-id", "R_kgDOSJMBkA");
+    script.setAttribute("data-category", "Announcements");
+    script.setAttribute("data-category-id", "DIC_kwDOSJMBkM4C7b1W");
+    script.setAttribute("data-mapping", "pathname");
+    script.setAttribute("data-strict", "0");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("data-emit-metadata", "0");
+    script.setAttribute("data-input-position", "top");
+    script.setAttribute("data-theme", currentGiscusTheme());
+    script.setAttribute("data-lang", "zh-CN");
+    script.setAttribute("data-loading", "lazy");
+    script.setAttribute("crossorigin", "anonymous");
+    script.async = true;
+    container.appendChild(script);
+
+    // 监听站内主题切换，通知 giscus iframe 跟着换
+    const observer = new MutationObserver(() => {
+      const theme = currentGiscusTheme();
+      const frame = document.querySelector("iframe.giscus-frame");
+      if (!frame || !frame.contentWindow) return;
+      frame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme } } },
+        "https://giscus.app"
+      );
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+  })();
+</script>
