@@ -27,6 +27,20 @@ const { noMarginTop = false, class: className, ...attrs } = Astro.props;
       <span>© {currentYear} Xtuul</span>
       <span class="hidden sm:inline">&nbsp;|&nbsp;</span>
       <span>保留所有权利</span>
+      <span
+        id="busuanzi_container_site_pv"
+        class="hidden sm:inline"
+        style="display:none"
+      >
+        &nbsp;|&nbsp;总访问量 <span id="busuanzi_value_site_pv"></span> 次
+      </span>
+      <span
+        id="busuanzi_container_site_uv"
+        class="hidden sm:inline"
+        style="display:none"
+      >
+        &nbsp;|&nbsp;访客数 <span id="busuanzi_value_site_uv"></span> 人
+      </span>
     </div>
   </div>
 </footer>

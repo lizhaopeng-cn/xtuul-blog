@@ -180,5 +180,21 @@ const structuredData = {
 
     <!-- Load full theme logic -->
     <script src="../scripts/theme.ts"></script>
+
+    <!-- 不蒜子访问统计：只在 astro:page-load 里注入，避免首次加载与事件回调各上报一次导致 +2 -->
+    <script is:inline>
+      document.addEventListener("astro:page-load", () => {
+        // 移除上一次注入的脚本，避免同时存在多个 JSONP 请求
+        document
+          .querySelectorAll("script[data-busuanzi]")
+          .forEach(node => node.remove());
+        const s = document.createElement("script");
+        s.src = "https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js";
+        s.async = true;
+        s.defer = true;
+        s.setAttribute("data-busuanzi", "1");
+        document.body.appendChild(s);
+      });
+    </script>
   </body>
 </html>

@@ -100,6 +100,14 @@ const nextPost =
     <div class="my-2 flex items-center gap-2">
       <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
       <span
+        id="busuanzi_container_page_pv"
+        class="text-sm opacity-80"
+        style="display:none"
+      >
+        <span aria-hidden="true">|</span>
+        阅读量 <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+      <span
         aria-hidden="true"
         class:list={[
           "max-sm:hidden",
