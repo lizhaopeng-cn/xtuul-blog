@@ -137,6 +137,14 @@ const structuredData = {
 
     <ClientRouter />
 
+    <!-- Cloudflare Web Analytics -->
+    <script
+      is:inline
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "84e57614631e4eb99831167a05bcb36a"}'
+    ></script>
+
     <!-- Minimal inline script to prevent FOUC - sets theme immediately -->
     <script is:inline>
       (function () {
