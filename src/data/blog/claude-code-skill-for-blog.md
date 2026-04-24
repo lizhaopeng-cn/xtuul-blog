@@ -1,7 +1,7 @@
 ---
 author: Xtuul
 pubDatetime: 2026-04-25T00:29:45+08:00
-title: "从零搭建个人技术博客 · 篇三：用 Claude Code 的 skill 和 command 接管博客增删改查"
+title: 从零搭建个人技术博客 · 篇三：用 Claude Code 的 skill 和 command 接管博客增删改查
 slug: claude-code-skill-for-blog
 featured: false
 draft: false
@@ -11,6 +11,13 @@ tags:
   - skill
   - automation
 description: 把 blog.xtuul.com 的新建/列表/修改/删除做成 /blog new、/blog list、/blog edit、/blog delete，全部走 Claude Code 的 slash command + skill。这篇记录怎么设计、怎么落盘、怎么跨会话全局可用。
+crosspost:
+  devto:
+    id: 3546977
+    url: "https://dev.to/lizhaopengcn/cong-ling-da-jian-ge-ren-ji-zhu-bo-ke-pian-san-yong-claude-code-de-skill-he-command-jie-guan-bo-ke-zeng-shan-gai-cha-3lm0"
+  hashnode:
+    id: 69eb9ada5ea34fe02de1a3d4
+    url: "https://xtuul.hashnode.dev/claude-code-skill-command"
 ---
 
 这是"从零搭建个人技术博客"系列的第三篇。前两篇讲了怎么把站点跑起来、怎么把文章自动分发到 dev.to / Hashnode；这一篇往回退一步，聊写作流本身 —— 写/改/删一篇博客的动作太零碎了，想把它自动化掉。
