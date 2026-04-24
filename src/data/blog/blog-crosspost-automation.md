@@ -1,7 +1,7 @@
 ---
 author: Xtuul
 pubDatetime: 2026-04-24T19:50:10+08:00
-title: "从零搭建个人技术博客 · 篇二：跨平台自动分发"
+title: 从零搭建个人技术博客 · 篇二：跨平台自动分发
 slug: blog-crosspost-automation
 featured: false
 draft: false
@@ -10,6 +10,13 @@ tags:
   - automation
   - devops
 description: push 到 main 就自动把文章同步到 dev.to / Hashnode / 博客园。写完才发现博客园从 GitHub Actions 打过去会被风控拦掉，于是这篇也顺便记录了：为什么最终国内平台全部放弃。
+crosspost:
+  devto:
+    id: 3545999
+    url: "https://dev.to/lizhaopengcn/cong-ling-da-jian-ge-ren-ji-zhu-bo-ke-pian-er-kua-ping-tai-zi-dong-fen-fa-5e5h"
+  hashnode:
+    id: 69eb5970cf6debc40324812d
+    url: "https://xtuul.hashnode.dev/5luo6zu25pct5bu65liq5lq65oqa5pyv5y2a5a6iimk3ioevhs6jo8mui3qow5swpsoihquwkqowihuwpkq"
 ---
 
 篇一是主站（`blog.xtuul.com`）本身的搭建，篇三是写作流（`/blog new` 这套 skill）。这一篇填篇二：**文章写完 push 上去之后，自动同步到其他平台**，不用我手动复制粘贴。
