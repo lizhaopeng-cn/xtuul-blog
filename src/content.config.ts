@@ -20,6 +20,13 @@ const blog = defineCollection({
       canonicalURL: z.string().optional(),
       hideEditPost: z.boolean().optional(),
       timezone: z.string().optional(),
+      crosspost: z
+        .object({
+          devto: z.object({ id: z.number(), url: z.string() }).optional(),
+          hashnode: z.object({ id: z.string(), url: z.string() }).optional(),
+          cnblogs: z.object({ id: z.string(), url: z.string() }).optional(),
+        })
+        .optional(),
     }),
 });
 

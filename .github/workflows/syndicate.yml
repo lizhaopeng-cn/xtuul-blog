@@ -1,0 +1,73 @@
+name: Syndicate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/data/blog/**/*.md"
+  workflow_dispatch:
+    inputs:
+      files:
+        description: "Space-separated markdown paths (blank = diff HEAD~1..HEAD)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: syndicate-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  syndicate:
+    name: Cross-post to dev.to / Hashnode / 博客园
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Need previous commit to diff against; fetch-depth: 2 is enough for push events.
+          fetch-depth: 2
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Run crosspost
+        id: crosspost
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          HASHNODE_API_KEY: ${{ secrets.HASHNODE_API_KEY }}
+          HASHNODE_PUBLICATION_ID: ${{ secrets.HASHNODE_PUBLICATION_ID }}
+          CNBLOGS_USERNAME: ${{ secrets.CNBLOGS_USERNAME }}
+          CNBLOGS_APP_KEY: ${{ secrets.CNBLOGS_APP_KEY }}
+          SITE_BASE: https://blog.xtuul.com/
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          if [ -n "${{ github.event.inputs.files }}" ]; then
+            pnpm dlx tsx scripts/crosspost/index.ts ${{ github.event.inputs.files }}
+          else
+            pnpm dlx tsx scripts/crosspost/index.ts
+          fi
+
+      - name: Commit ID writebacks
+        if: steps.crosspost.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/blog
+          git commit -m "chore(crosspost): write back platform IDs [skip ci]"
+          git push
