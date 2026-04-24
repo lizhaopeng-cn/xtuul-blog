@@ -1,6 +1,6 @@
 ---
 author: Xtuul
-pubDatetime: "2026-04-22T16:30:00+08:00"
+pubDatetime: 2026-04-22T16:30:00+08:00
 title: 从零搭建个人技术博客 · 篇一：Astro + Cloudflare Pages + AstroPaper
 slug: setup-astro-cloudflare-astropaper
 featured: true
