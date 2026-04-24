@@ -25,61 +25,106 @@ export async function loadPost(
 /**
  * YAML parser trimmed to the shape AstroPaper posts actually use.
  * Handles scalars, inline strings (with or without quotes), block lists
- * (`tags:` followed by `- x`), and one level of nested object (`crosspost:`).
+ * (`tags:` followed by `- x`), and nested objects via indentation
+ * (needed for `crosspost.<platform>.{id,url}`).
  * A full YAML lib would be safer, but shipping one just to read our own files
  * felt heavier than the risk — revisit if we ever hit an edge case.
  */
 function parseFrontmatter(block: string): Frontmatter {
   const lines = block.split("\n");
+  const { value } = readObject(lines, 0, 0);
+  return value as Frontmatter;
+}
+
+function indentOf(line: string): number {
+  const m = line.match(/^( *)/);
+  return m ? m[1].length : 0;
+}
+
+function isSkippable(line: string | undefined): boolean {
+  return line === undefined || !line.trim() || line.trim().startsWith("#");
+}
+
+function readObject(
+  lines: string[],
+  start: number,
+  indent: number,
+): { value: Record<string, unknown>; next: number } {
   const out: Record<string, unknown> = {};
-  let i = 0;
+  let i = start;
   while (i < lines.length) {
     const line = lines[i];
-    if (!line.trim() || line.trim().startsWith("#")) {
+    if (isSkippable(line)) {
       i++;
       continue;
     }
-    const kv = line.match(/^([A-Za-z_][A-Za-z0-9_]*):\s*(.*)$/);
+    const ind = indentOf(line);
+    if (ind < indent) break;
+    if (ind > indent) {
+      i++;
+      continue;
+    }
+    const kv = line
+      .slice(indent)
+      .match(/^([A-Za-z_][A-Za-z0-9_]*):\s*(.*)$/);
     if (!kv) {
       i++;
       continue;
     }
     const [, key, rest] = kv;
-    if (rest === "") {
-      const { value, next } = readBlock(lines, i + 1);
+    if (rest !== "") {
+      out[key] = parseScalar(rest);
+      i++;
+      continue;
+    }
+    // rest is empty → look ahead for a nested block
+    let j = i + 1;
+    while (j < lines.length && isSkippable(lines[j])) j++;
+    if (j >= lines.length) {
+      out[key] = null;
+      i = j;
+      continue;
+    }
+    const childIndent = indentOf(lines[j]);
+    if (childIndent <= indent) {
+      out[key] = null;
+      i = j;
+      continue;
+    }
+    if (lines[j].slice(childIndent).startsWith("- ")) {
+      const { value, next } = readArray(lines, j, childIndent);
       out[key] = value;
       i = next;
     } else {
-      out[key] = parseScalar(rest);
-      i++;
+      const { value, next } = readObject(lines, j, childIndent);
+      out[key] = value;
+      i = next;
     }
   }
-  return out as Frontmatter;
+  return { value: out, next: i };
 }
 
-function readBlock(
+function readArray(
   lines: string[],
   start: number,
-): { value: unknown; next: number } {
-  const first = lines[start];
-  if (first?.match(/^\s*-\s+/)) {
-    const arr: string[] = [];
-    let j = start;
-    while (j < lines.length && lines[j].match(/^\s*-\s+/)) {
-      arr.push(parseScalar(lines[j].replace(/^\s*-\s+/, "")) as string);
-      j++;
+  indent: number,
+): { value: unknown[]; next: number } {
+  const arr: unknown[] = [];
+  let i = start;
+  while (i < lines.length) {
+    const line = lines[i];
+    if (isSkippable(line)) {
+      i++;
+      continue;
     }
-    return { value: arr, next: j };
+    const ind = indentOf(line);
+    if (ind !== indent) break;
+    const rest = line.slice(indent);
+    if (!rest.startsWith("- ")) break;
+    arr.push(parseScalar(rest.slice(2)));
+    i++;
   }
-  const obj: Record<string, unknown> = {};
-  let j = start;
-  while (j < lines.length && lines[j].match(/^\s{2,}[A-Za-z_]/)) {
-    const m = lines[j].match(/^\s+([A-Za-z_][A-Za-z0-9_]*):\s*(.*)$/);
-    if (!m) break;
-    obj[m[1]] = parseScalar(m[2]);
-    j++;
-  }
-  return { value: obj, next: j };
+  return { value: arr, next: i };
 }
 
 function parseScalar(raw: string): unknown {

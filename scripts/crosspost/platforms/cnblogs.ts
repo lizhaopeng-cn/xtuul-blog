@@ -72,24 +72,37 @@ function buildEditPostXml(
 </methodCall>`;
 }
 
-function parseStringResponse(xml: string): string {
-  const fault = xml.match(
+function extractFault(xml: string): string | null {
+  const str = xml.match(
     /<fault>[\s\S]*?<member><name>faultString<\/name><value><string>([\s\S]*?)<\/string>/,
   );
-  if (fault) throw new Error(`cnblogs fault: ${fault[1]}`);
+  if (str) return `faultString=${str[1]}`;
+  const code = xml.match(
+    /<fault>[\s\S]*?<member><name>faultCode<\/name><value><int>(\d+)<\/int>/,
+  );
+  if (code) return `faultCode=${code[1]}`;
+  return null;
+}
+
+function parseStringResponse(xml: string): string {
+  const fault = extractFault(xml);
+  if (fault) throw new Error(`cnblogs fault: ${fault}`);
   const m =
     xml.match(/<param>\s*<value>\s*<string>([\s\S]*?)<\/string>/) ||
     xml.match(/<param>\s*<value>([\s\S]*?)<\/value>/);
-  if (!m) throw new Error(`cnblogs: unexpected response: ${xml.slice(0, 200)}`);
+  if (!m) throw new Error(`cnblogs: unexpected response: ${xml.slice(0, 300)}`);
   return m[1].trim();
 }
 
 function parseBoolResponse(xml: string): boolean {
-  const fault = xml.match(
-    /<fault>[\s\S]*?<member><name>faultString<\/name><value><string>([\s\S]*?)<\/string>/,
-  );
-  if (fault) throw new Error(`cnblogs fault: ${fault[1]}`);
+  const fault = extractFault(xml);
+  if (fault) throw new Error(`cnblogs fault: ${fault}`);
   return /<boolean>1<\/boolean>/.test(xml);
+}
+
+function describeHttp(status: number, body: string): string {
+  const snippet = body.replace(/\s+/g, " ").slice(0, 300);
+  return `HTTP ${status} ${snippet || "(empty body)"}`;
 }
 
 export const cnblogs: Publisher = {
@@ -110,6 +123,7 @@ export const cnblogs: Publisher = {
           body: buildEditPostXml(user, key, existing.id, post),
         });
         const xml = await res.text();
+        if (!res.ok) throw new Error(describeHttp(res.status, xml));
         parseBoolResponse(xml);
         return {
           platform: "cnblogs",
@@ -126,6 +140,7 @@ export const cnblogs: Publisher = {
         body: buildNewPostXml(user, key, post),
       });
       const xml = await res.text();
+      if (!res.ok) throw new Error(describeHttp(res.status, xml));
       const id = parseStringResponse(xml);
       const url = `https://www.cnblogs.com/${user}/p/${id}.html`;
       return { platform: "cnblogs", ok: true, action: "create", id, url };
