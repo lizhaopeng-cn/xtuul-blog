@@ -1,7 +1,7 @@
 ---
 author: Xtuul
-pubDatetime: 2026-04-22T16:30:00+08:00
-title: "从零搭建个人技术博客 · 篇一：Astro + Cloudflare Pages + AstroPaper"
+pubDatetime: "2026-04-22T16:30:00+08:00"
+title: 从零搭建个人技术博客 · 篇一：Astro + Cloudflare Pages + AstroPaper
 slug: setup-astro-cloudflare-astropaper
 featured: true
 draft: false
@@ -12,6 +12,13 @@ tags:
   - blog
   - devops
 description: 一个程序员博客的基础设施落地：静态站用什么技术、为什么这么选、如何从一个空目录跑到线上 https 访问。篇一只做主站，后续篇章再接自动化分发。
+crosspost:
+  devto:
+    id: 3544836
+    url: "https://dev.to/lizhaopengcn/cong-ling-da-jian-ge-ren-ji-zhu-bo-ke-pian-astro-cloudflare-pages-astropaper-4ib"
+  hashnode:
+    id: 69eb1b54bada4a44e9c589e2
+    url: "https://xtuul.hashnode.dev/astro-cloudflare-pages-astropaper"
 ---
 
 这是"从零搭建个人技术博客"系列的第一篇，记录我把 `blog.xtuul.com` 从无到有跑起来的完整过程 —— 技术选型、架构、操作步骤、踩到的坑。
