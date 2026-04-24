@@ -169,9 +169,18 @@ function stringifyFrontmatter(fm: Frontmatter): string {
   return lines.filter(Boolean).join("\n");
 }
 
+// Keys that Astro's schema parses as native dates — must be emitted as a bare
+// YAML timestamp (no quotes), otherwise `z.date()` sees a string and the
+// content-collection sync fails with `Expected type "date", received "string"`.
+const DATETIME_KEYS = new Set(["pubDatetime", "modDatetime"]);
+
 function emit(key: string, value: unknown): string {
   if (value === undefined) return "";
   if (value === null) return `${key}: null`;
+  if (DATETIME_KEYS.has(key) && (typeof value === "string" || value instanceof Date)) {
+    const iso = value instanceof Date ? value.toISOString() : value;
+    return `${key}: ${iso}`;
+  }
   if (Array.isArray(value)) {
     return `${key}:\n${value.map(v => `  - ${scalar(v)}`).join("\n")}`;
   }

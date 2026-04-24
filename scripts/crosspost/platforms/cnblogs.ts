@@ -112,7 +112,12 @@ export const cnblogs: Publisher = {
   async publish(post: Post): Promise<PublishResult> {
     const user = process.env.CNBLOGS_USERNAME!;
     const key = process.env.CNBLOGS_APP_KEY!;
-    const endpoint = `https://rpc.cnblogs.com/metaweblog/${encodeURIComponent(user)}`;
+    // 博客园的 MetaWeblog 登录名（CNBLOGS_USERNAME，比如 lzzzp）和博客地址
+    // slug（出现在文章 URL 里，比如 lizhaopeng）经常不是同一个。登录名用于
+    // 鉴权，slug 用于拼 endpoint 和文章永久链接。没配 slug 就退回登录名，
+    // 保持和历史行为一致。
+    const blogSlug = process.env.CNBLOGS_BLOG_SLUG || user;
+    const endpoint = `https://rpc.cnblogs.com/metaweblog/${encodeURIComponent(blogSlug)}`;
     const existing = post.frontmatter.crosspost?.cnblogs;
 
     try {
@@ -142,7 +147,7 @@ export const cnblogs: Publisher = {
       const xml = await res.text();
       if (!res.ok) throw new Error(describeHttp(res.status, xml));
       const id = parseStringResponse(xml);
-      const url = `https://www.cnblogs.com/${user}/p/${id}.html`;
+      const url = `https://www.cnblogs.com/${blogSlug}/p/${id}.html`;
       return { platform: "cnblogs", ok: true, action: "create", id, url };
     } catch (err) {
       return {

@@ -19,8 +19,9 @@
 | `DEVTO_API_KEY` | dev.to → Settings → Extensions → DEV API Keys | 不配就跳过 dev.to |
 | `HASHNODE_API_KEY` | Hashnode → Settings → Developer → Personal Access Token | 不配就跳过 Hashnode |
 | `HASHNODE_PUBLICATION_ID` | Hashnode blog dashboard URL 里的 publication ID | 必须和 API key 同时配 |
-| `CNBLOGS_USERNAME` | 博客园用户名（URL 里的 `/u/xxx` 那段） | 不配就跳过博客园 |
-| `CNBLOGS_APP_KEY` | 博客园 → 设置 → "MetaWeblog 访问" → 应用密钥 | 必须和 username 同时配 |
+| `CNBLOGS_USERNAME` | 博客园 **MetaWeblog 登录名**（不是博客 URL slug，登录名经常不同，比如 `lzzzp`）| 不配就跳过博客园 |
+| `CNBLOGS_APP_KEY` | 博客园 → 设置 → "MetaWeblog 访问" → 访问令牌（不是早期的应用密钥，博客园已强制迁到 access token）| 必须和 username 同时配 |
+| `CNBLOGS_BLOG_SLUG` | 博客地址 URL 里的那段（比如 `lizhaopeng`），用于拼 endpoint 和文章永久链接 | 不配就退回 `CNBLOGS_USERNAME`；登录名和 slug 不同的用户必须配 |
 
 ## 行为
 
