@@ -1,7 +1,7 @@
 ---
 author: Xtuul
 pubDatetime: 2026-04-28T18:27:41+08:00
-title: "Claude Code 模型切换与 CCR 路由：踩坑全记录"
+title: Claude Code 模型切换与 CCR 路由：踩坑全记录
 slug: claude-code-model-routing-analysis
 featured: false
 draft: false
@@ -10,6 +10,13 @@ tags:
   - ccr
   - devtools
 description: 记录在 Claude Code + CCR 环境下 /model 切换的两个关键问题：Haiku 路由命中错规则，以及官方内置别名 vs 三方 model ID 的能力差异。
+crosspost:
+  devto:
+    id: 3561918
+    url: "https://dev.to/lizhaopengcn/claude-code-mo-xing-qie-huan-yu-ccr-lu-you-cai-keng-quan-ji-lu-4bal"
+  hashnode:
+    id: 69f091135236c05348ac3783
+    url: "https://xtuul.hashnode.dev/claude-code-ccr"
 ---
 
 这篇是两个调试 session 的踩坑记录，讲清楚三件事：为什么 CCR 的 `/model haiku` 路由不生效、为什么走 OpenRouter 用 Claude 内置别名比三方 model ID 好、以及官方通道独有什么。
