@@ -1,7 +1,7 @@
 ---
 author: Xtuul
 pubDatetime: 2026-04-28T15:56:26+08:00
-title: "把 Claude Code 搬进飞书和 Telegram：cc-connect + CCR 完整架构、安装流程与踩坑全记录"
+title: 把 Claude Code 搬进飞书和 Telegram：cc-connect + CCR 完整架构、安装流程与踩坑全记录
 slug: cc-connect-ccr-setup-guide
 featured: false
 draft: false
@@ -10,6 +10,13 @@ tags:
   - automation
   - devops
 description: IM（飞书 / Telegram）⇄ cc-connect ⇄ Claude Code ⇄ CCR ⇄ OpenRouter ⇄ 多家大模型。手机上用 Claude Code 的一整套工程化方案，含语音转写、MCP、launchd 守护和 13 个踩坑实录。
+crosspost:
+  devto:
+    id: 3561327
+    url: "https://dev.to/lizhaopengcn/ba-claude-code-ban-jin-fei-shu-he-telegramcc-connect-ccr-wan-zheng-jia-gou-an-zhuang-liu-cheng-yu-cai-keng-quan-ji-lu-1d0l"
+  hashnode:
+    id: 69f078059798a77fdc3bb2f5
+    url: "https://xtuul.hashnode.dev/claude-code-telegramcc-connect-ccr"
 ---
 
 **本篇讲什么**：一套让你在手机上用 Claude Code 的工程化方案——`IM（飞书 / Telegram）⇄ cc-connect ⇄ Claude Code ⇄ CCR ⇄ OpenRouter ⇄ 多家大模型`。含语音转写（Groq Whisper）、MCP（Stitch）、launchd 守护、模型按需切换，外加 13 个一路踩过的坑。
