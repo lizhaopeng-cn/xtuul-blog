@@ -1,7 +1,7 @@
 ---
 author: Xtuul
 pubDatetime: 2026-05-01T17:25:00+08:00
-title: "Claude Code 状态栏统一布局，两条数据链路：OpenRouter 直连 vs CCR 代理"
+title: Claude Code 状态栏统一布局，两条数据链路：OpenRouter 直连 vs CCR 代理
 slug: claude-code-statusline-openrouter-vs-ccr
 featured: false
 draft: false
@@ -11,6 +11,13 @@ tags:
   - ccr
   - devtools
 description: 给 Claude Code 做了一套四行树形状态栏，一份给 bare claude 走 OpenRouter，一份给 ccr code 走本地代理。记录颜色、图标、进度条的打磨过程，以及两条链路数据源差异带来的坑。
+crosspost:
+  devto:
+    id: 3595258
+    url: "https://dev.to/lizhaopengcn/claude-code-zhuang-tai-lan-tong-bu-ju-liang-tiao-shu-ju-lian-lu-openrouter-zhi-lian-vs-ccr-dai-li-1id2"
+  hashnode:
+    id: 69f47676e4b7aeb5ff9252a4
+    url: "https://xtuul.hashnode.dev/claude-code-openrouter-vs-ccr"
 ---
 
 这篇是给 [claude-statusline](https://github.com/lizhaopeng-cn/claude-statusline) 仓库做的一次完整迭代记录。同一套视觉语言，两个脚本实现，分别服务 bare `claude` 和 `ccr code` 两条启动路径。重点不是"怎么写一个状态栏"，而是**为什么需要两个脚本**，以及它们各自拿得到什么、拿不到什么。
